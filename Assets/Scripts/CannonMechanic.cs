@@ -30,12 +30,28 @@ public class CannonMechanic : MonoBehaviour
 
     private void Aim()
     {
-        
+        if (_isShooting) return;
+        if (Input.GetAxis("Fire1") == 1)
+        {
+            if (!_isAiming)
+            {
+                print("1St part");
+                //cal
+            }
+            else
+            {
+                //Aim Cal path
+            }
+        }
+        else
+        {
+            //Shoot
+        }
     }
 
     
     private void Update()
     {
-        
+        Aim();
     }
 }
