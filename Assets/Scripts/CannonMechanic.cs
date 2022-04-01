@@ -8,12 +8,12 @@ public class CannonMechanic : MonoBehaviour
     [SerializeField] private float _power = 2f;
     [SerializeField] private int _amountOfDots = 15;
 
-    private Vector2 _startPos;
+    private Vector2 _startPosition;
     private bool _isShooting;
     private bool _isAiming;
 
-    private GameObject Dots;
-    private List<GameObject> _projectilesPath;
+    [SerializeField] private GameObject Dots;
+    [SerializeField] private List<GameObject> _projectilesPath;
 
     private Rigidbody2D _ballBody;
     public GameObject ballPrefab;
@@ -25,19 +25,19 @@ public class CannonMechanic : MonoBehaviour
         _projectilesPath = Dots.transform.Cast<Transform>().ToList().ConvertAll(t => t.gameObject);
         for (int i = 0; i < _projectilesPath.Count; i++)
         {
-            _projectilesPath[i].GetComponent<Renderer>().enabled = false;
+            _projectilesPath[i].GetComponent<Renderer>().enabled = false; // Выключение всех точек прицеливания
         }
     }
 
-    private void Aim()
+    private void Aim() // Прицеливание
     {
         if (_isShooting) return;
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButton(0)) // Пока клавиша зажата
         {
             if (!_isAiming)
             {
                 _isAiming = true;
-                _startPos = Input.mousePosition;
+                _startPosition = Input.mousePosition;
             }
             else
             {
@@ -53,25 +53,25 @@ public class CannonMechanic : MonoBehaviour
         }
     }
 
-    private Vector2 ShootForce(Vector3 force)
+    private Vector2 ShootForce(Vector2 force) // Сила выстрела
     {
-        return (new Vector2(_startPos.x, _startPos.y) - new Vector2(force.x, force.y)) * _power;
+        return (new Vector2(_startPosition.x, _startPosition.y) - (new Vector2(force.x, force.y)) * _power);
     }
 
-    private Vector2 DotPath(Vector2 startPosition, Vector2 startVelocity, float t)
+    private Vector2 DotPath(Vector2 startPosition, Vector2 startVelocity, float t) // Точечный путь
     {
-        return startPosition + startVelocity * t + 0.5f * Physics2D.gravity * t * t;
+        return startPosition + startVelocity * t + 0.5f * Physics2D.gravity * (int)Math.Pow(t,2);
     }
 
-    private void PathCalculation()
+    private void PathCalculation() // Расчёт пути
     {
-        Vector2 vel = ShootForce(Input.mousePosition) * Time.fixedDeltaTime / _ballBody.mass;
+        Vector2 velocity = ShootForce(Input.mousePosition) * Time.fixedDeltaTime / _ballBody.mass;
 
         for (int i = 0; i < _projectilesPath.Count; i++)
         {
-            _projectilesPath[i].GetComponent<Renderer>().enabled = true;
+            _projectilesPath[i].GetComponent<Renderer>().enabled = true; // Включение точек прицеливания
             float t = i / 15f;
-            Vector3 point = DotPath(transform.position, vel, t);
+            Vector3 point = DotPath(transform.position, velocity, t);
             point.z = 1;
             _projectilesPath[i].transform.position = point;
         }
