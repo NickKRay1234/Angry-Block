@@ -595,6 +595,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1487984571}
     m_Modifications:
+    - target: {fileID: 3002542891823454941, guid: 16eef1ccfda55a34eb55d0cb22edf307, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3319258753736679883, guid: 16eef1ccfda55a34eb55d0cb22edf307, type: 3}
       propertyPath: m_Name
       value: dot (11)
@@ -1426,7 +1430,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d26f28155ead63d46800ccd582124324, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _power: 2
+  _power: 1
   _amountOfDots: 15
   Dots: {fileID: 1487984570}
   _projectilesPath: []

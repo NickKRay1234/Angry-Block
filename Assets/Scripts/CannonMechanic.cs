@@ -34,14 +34,13 @@ public class CannonMechanic : MonoBehaviour
         if (_isShooting) return;
         if (Input.GetMouseButton(0)) // Пока клавиша зажата
         {
-            if (!_isAiming)
+            if (!_isAiming) // Когда клавиша зажата выстрел не происходит.
             {
                 _isAiming = true;
                 _startPosition = Input.mousePosition;
             }
-            else
+            else // Как только клавиша резко нажимается или отпускается, то происходит выстрел
             {
-                //Aim Cal path
                 PathCalculation();
             }
         }
@@ -55,6 +54,7 @@ public class CannonMechanic : MonoBehaviour
 
     private Vector2 ShootForce(Vector2 force) // Сила выстрела
     {
+        Debug.Log(new Vector2(_startPosition.x, _startPosition.y) - (new Vector2(force.x, force.y)) * _power);
         return (new Vector2(_startPosition.x, _startPosition.y) - (new Vector2(force.x, force.y)) * _power);
     }
 
@@ -65,6 +65,7 @@ public class CannonMechanic : MonoBehaviour
 
     private void PathCalculation() // Расчёт пути
     {
+        Debug.Log(Input.mousePosition);
         Vector2 velocity = ShootForce(Input.mousePosition) * Time.fixedDeltaTime / _ballBody.mass;
 
         for (int i = 0; i < _projectilesPath.Count; i++)
@@ -75,7 +76,6 @@ public class CannonMechanic : MonoBehaviour
             point.z = 1;
             _projectilesPath[i].transform.position = point;
         }
-        
     }
 
     
