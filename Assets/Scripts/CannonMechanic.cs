@@ -1,87 +1,86 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
+// using System.Linq; теоретически мусор
 using UnityEngine;
 
 public class CannonMechanic : MonoBehaviour
 {
     [SerializeField] private float _power = 2f;
-    [SerializeField] private int _amountOfDots = 15;
+    [SerializeField] private List<Renderer> _projectilesPath;
+
+    [SerializeField] private Rigidbody2D _ballPrefab;
+    //[SerializeField] private GameObject ballsContainer;
+    //[SerializeField] private int _amountOfDots = 15; // теоретически мусор
+    //[SerializeField] private GameObject Dots; // теоретически мусор
 
     private Vector2 _startPosition;
-    private bool _isShooting;
+    private bool _isShooting = false;
     private bool _isAiming;
 
-    [SerializeField] private GameObject Dots;
-    [SerializeField] private List<GameObject> _projectilesPath;
+    //private Rigidbody2D _ballBody;
 
-    private Rigidbody2D _ballBody;
-    public GameObject ballPrefab;
-    public GameObject ballsContainer;
-    
-    private void Start()
+    /*private void Start()
     {
-        Dots = GameObject.Find("Dots");
-        _projectilesPath = Dots.transform.Cast<Transform>().ToList().ConvertAll(t => t.gameObject);
+        //Dots = GameObject.Find("Dots"); // теоретически мусор
+        //_projectilesPath = Dots.transform.Cast<Transform>().ToList().ConvertAll(t => t.gameObject); // теоретически мусор
         for (int i = 0; i < _projectilesPath.Count; i++)
         {
             _projectilesPath[i].GetComponent<Renderer>().enabled = false; // Выключение всех точек прицеливания
         }
-    }
+    }*/
 
-    private void Aim() // Прицеливание
+
+    private void Aim()
     {
         if (_isShooting) return;
-        if (Input.GetMouseButton(0)) // Пока клавиша зажата
+        if (Input.GetMouseButton(0)) // While button is pressed
         {
-            if (!_isAiming) // Когда клавиша зажата выстрел не происходит.
+            if (!_isAiming)
             {
                 _isAiming = true;
                 _startPosition = Input.mousePosition;
             }
-            else // Как только клавиша резко нажимается или отпускается, то происходит выстрел
-            {
+            else
                 PathCalculation();
-            }
         }
-        else if(_isAiming && !_isShooting)
-        {
+        else if (_isAiming && !_isShooting)
             _isAiming = false;
-            print("Shoot");
-            //Shoot
-        }
     }
 
+    /// <summary>
+    /// Return negative mouse position multiplied by power
+    /// </summary>
     private Vector2 ShootForce(Vector2 force) // Сила выстрела
     {
-        Debug.Log(new Vector2(_startPosition.x, _startPosition.y) - (new Vector2(force.x, force.y)) * _power);
-        return (new Vector2(_startPosition.x, _startPosition.y) - (new Vector2(force.x, force.y)) * _power);
+        return new Vector2(_startPosition.x, _startPosition.y) - ((new Vector2(force.x, force.y)) * _power);
     }
 
-    private Vector2 DotPath(Vector2 startPosition, Vector2 startVelocity, float t) // Точечный путь
+    /// <summary>
+    /// Projectile line of flight
+    /// </summary>
+    private Vector2 DotPath(Vector2 position, Vector2 velocity, float t)
     {
-        return startPosition + startVelocity * t + 0.5f * Physics2D.gravity * (int)Math.Pow(t,2);
+        return position + velocity * t + (Physics2D.gravity / 2) * (int)Math.Pow(t, 2);
     }
 
-    private void PathCalculation() // Расчёт пути
+    private Vector2 VelocityCalculation() //  Formula: V = F/m
     {
-        Debug.Log(Input.mousePosition);
-        Vector2 velocity = ShootForce(Input.mousePosition) * Time.fixedDeltaTime / _ballBody.mass;
+        return ShootForce(Input.mousePosition) * Time.fixedDeltaTime / _ballPrefab.mass; 
+    }
 
+    private void PathCalculation()
+    {
         for (int i = 0; i < _projectilesPath.Count; i++)
         {
-            _projectilesPath[i].GetComponent<Renderer>().enabled = true; // Включение точек прицеливания
             float t = i / 15f;
-            Vector3 point = DotPath(transform.position, velocity, t);
-            point.z = 1;
-            _projectilesPath[i].transform.position = point;
+            _projectilesPath[i].enabled = true;
+            _projectilesPath[i].transform.position = DotPath(transform.position, VelocityCalculation(), t);
         }
     }
 
     
     private void Update()
     {
-        _ballBody = ballPrefab.GetComponent<Rigidbody2D>();
         Aim();
         /*if (GC.shotCount <= 3 && !IsMouseOverUI())
         {
