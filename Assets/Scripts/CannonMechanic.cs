@@ -7,6 +7,7 @@ public class CannonMechanic : MonoBehaviour
     [SerializeField] private float _power = 2f;
     [SerializeField] private Rigidbody2D _ballPrefab;
     [SerializeField] private List<Renderer> _projectilesPath;
+    [SerializeField] private Transform _cannonTarget;
     
     private bool _isShooting = false;
     private bool _isAiming;
@@ -21,10 +22,19 @@ public class CannonMechanic : MonoBehaviour
             if (!_isAiming)
                 _isAiming = true;
             else
+            {
                 PathCalculation();
+                Rotate();
+            }
+            
+            
         }
         else if (_isAiming && !_isShooting)
+        {
             _isAiming = false;
+            HideDots();
+        }
+            
     }
 
     /// <summary>
@@ -40,7 +50,7 @@ public class CannonMechanic : MonoBehaviour
     /// </summary>
     private Vector2 DotPath(Vector2 position, Vector2 velocity, float t)
     {
-        return position + velocity * t + (Physics2D.gravity / 2) * (int)Math.Pow(t, 2);
+        return position + velocity * t + (Physics2D.gravity / 2) * (float)Math.Pow(t,2);
     }
 
     private Vector2 VelocityCalculation() //  Formula: V = F/m
@@ -53,13 +63,32 @@ public class CannonMechanic : MonoBehaviour
         for (int i = 0; i < _projectilesPath.Count; i++)
         {
             float t = i / (float)_projectilesPath.Count;
-            _projectilesPath[i].enabled = true;
+            ShowDots();
             _projectilesPath[i].transform.position = DotPath(transform.position, VelocityCalculation(), t);
         }
+    }
+
+    private void ShowDots()
+    {
+        for (int i = 0; i < _projectilesPath.Count; i++)
+            _projectilesPath[i].enabled = true;
+    }
+
+    private void HideDots()
+    {
+        for (int i = 0; i < _projectilesPath.Count; i++)
+            _projectilesPath[i].enabled = false;
     }
     
     private void Update()
     {
         Aim();
+    }
+
+    private void Rotate()
+    {
+        var dir = _cannonTarget.position - transform.position;
+        var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
     }
 }
