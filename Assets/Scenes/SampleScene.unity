@@ -1562,6 +1562,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _power: 2
+  _ballPrefab: {fileID: 7841212252099804967, guid: 3baa73e37e6af81408a64c2f974e8825, type: 3}
   _projectilesPath:
   - {fileID: 1208353046}
   - {fileID: 1967674112}
@@ -1578,4 +1579,4 @@ MonoBehaviour:
   - {fileID: 1802012747}
   - {fileID: 579064366}
   - {fileID: 1922647624}
-  _ballPrefab: {fileID: 7841212252099804967, guid: 3baa73e37e6af81408a64c2f974e8825, type: 3}
+  _cannonTarget: {fileID: 1061214699}
