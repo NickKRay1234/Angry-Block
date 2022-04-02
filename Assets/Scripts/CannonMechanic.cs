@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using System.Collections;
 
 public class CannonMechanic : MonoBehaviour
 {
@@ -8,7 +9,8 @@ public class CannonMechanic : MonoBehaviour
     [SerializeField] private Rigidbody2D _ballPrefab;
     [SerializeField] private List<Renderer> _projectilesPath;
     [SerializeField] private Transform _cannonTarget;
-    
+    [SerializeField] private GameObject _ballsContainer;
+
     private bool _isShooting = false;
     private bool _isAiming;
 
@@ -32,6 +34,7 @@ public class CannonMechanic : MonoBehaviour
         else if (_isAiming && !_isShooting)
         {
             _isAiming = false;
+            StartCoroutine(Shoot()); // Code review
             HideDots();
         }
             
@@ -58,7 +61,7 @@ public class CannonMechanic : MonoBehaviour
         return ShootForce(Input.mousePosition) * Time.fixedDeltaTime / _ballPrefab.mass; 
     }
 
-    private void PathCalculation()
+    private void PathCalculation() // Another script
     {
         for (int i = 0; i < _projectilesPath.Count; i++)
         {
@@ -91,4 +94,17 @@ public class CannonMechanic : MonoBehaviour
         var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
     }
+
+    IEnumerator Shoot() // Code review
+    {
+        for (int i = 0; i < 5; i++)
+        {
+            yield return new WaitForSeconds(0.07f);
+            Rigidbody2D ball = Instantiate(_ballPrefab, transform.position, Quaternion.identity);
+            ball.transform.SetParent(_ballsContainer.transform);
+            ball.AddForce(ShootForce(Input.mousePosition));
+        }
+        
+    }
+
 }
