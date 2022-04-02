@@ -1,33 +1,16 @@
-using System;
 using System.Collections.Generic;
-// using System.Linq; теоретически мусор
 using UnityEngine;
+using System;
 
 public class CannonMechanic : MonoBehaviour
 {
     [SerializeField] private float _power = 2f;
-    [SerializeField] private List<Renderer> _projectilesPath;
-
     [SerializeField] private Rigidbody2D _ballPrefab;
-    //[SerializeField] private GameObject ballsContainer;
-    //[SerializeField] private int _amountOfDots = 15; // теоретически мусор
-    //[SerializeField] private GameObject Dots; // теоретически мусор
-
-    private Vector2 _startPosition;
+    [SerializeField] private List<Renderer> _projectilesPath;
+    
     private bool _isShooting = false;
     private bool _isAiming;
 
-    //private Rigidbody2D _ballBody;
-
-    /*private void Start()
-    {
-        //Dots = GameObject.Find("Dots"); // теоретически мусор
-        //_projectilesPath = Dots.transform.Cast<Transform>().ToList().ConvertAll(t => t.gameObject); // теоретически мусор
-        for (int i = 0; i < _projectilesPath.Count; i++)
-        {
-            _projectilesPath[i].GetComponent<Renderer>().enabled = false; // Выключение всех точек прицеливания
-        }
-    }*/
 
 
     private void Aim()
@@ -36,10 +19,7 @@ public class CannonMechanic : MonoBehaviour
         if (Input.GetMouseButton(0)) // While button is pressed
         {
             if (!_isAiming)
-            {
                 _isAiming = true;
-                _startPosition = Input.mousePosition;
-            }
             else
                 PathCalculation();
         }
@@ -50,9 +30,9 @@ public class CannonMechanic : MonoBehaviour
     /// <summary>
     /// Return negative mouse position multiplied by power
     /// </summary>
-    private Vector2 ShootForce(Vector2 force) // Сила выстрела
+    private Vector2 ShootForce(Vector2 force)
     {
-        return new Vector2(_startPosition.x, _startPosition.y) - ((new Vector2(force.x, force.y)) * _power);
+        return new Vector2(Input.mousePosition.x, Input.mousePosition.y) - ((new Vector2(force.x, force.y)) * _power);
     }
 
     /// <summary>
@@ -72,20 +52,14 @@ public class CannonMechanic : MonoBehaviour
     {
         for (int i = 0; i < _projectilesPath.Count; i++)
         {
-            float t = i / 15f;
+            float t = i / (float)_projectilesPath.Count;
             _projectilesPath[i].enabled = true;
             _projectilesPath[i].transform.position = DotPath(transform.position, VelocityCalculation(), t);
         }
     }
-
     
     private void Update()
     {
         Aim();
-        /*if (GC.shotCount <= 3 && !IsMouseOverUI())
-        {
-            Aim();
-            Rotate();
-        }*/
     }
 }
