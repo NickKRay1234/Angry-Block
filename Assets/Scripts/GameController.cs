@@ -1,0 +1,31 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class GameController : MonoBehaviour
+{
+    public List<GameObject> levels;
+
+    private GameObject level1;
+    private GameObject level2;
+
+    private Vector2 level1Pos;
+    private Vector2 level2Pos;
+
+    private void Start()
+    {
+        Physics2D.gravity = new Vector2(0, -17);
+    }
+
+    private void SpawnNewLevel(int numberLevel1, int numberLevel2)
+    {
+        level1Pos = new Vector2(3.5f, 1);
+        level2Pos = new Vector2(3.5f, -3.4f);
+        
+        
+    }
+
+
+
+}
