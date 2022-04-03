@@ -16,14 +16,20 @@ public class GameController : MonoBehaviour
     private void Start()
     {
         Physics2D.gravity = new Vector2(0, -17);
+        
+        SpawnNewLevel(0, 17);
     }
 
     private void SpawnNewLevel(int numberLevel1, int numberLevel2)
     {
         level1Pos = new Vector2(3.5f, 1);
         level2Pos = new Vector2(3.5f, -3.4f);
-        
-        
+
+        level1 = levels[numberLevel1];
+        level2 = levels[numberLevel2];
+
+        Instantiate(level1, level1Pos, Quaternion.identity);
+        Instantiate(level2, level2Pos, Quaternion.identity);
     }
 
 
