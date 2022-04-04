@@ -1,18 +1,39 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Block : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    private int count;
+    
+    
+    private void Start()
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
+    
+    private void Update()
     {
-        
+        if (transform.position.y <= -7)
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    public void SetStartingCount(int count)
+    {
+        this.count = count;
+    }
+
+    private void OnCollisionEnter2D(Collision2D target)
+    {
+        if (target.collider.name = "Ball" && count > 0)
+        {
+            count--;
+            if(count == 0)
+                Destroy(gameObject);
+        }
     }
 }
