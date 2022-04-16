@@ -3,22 +3,19 @@ using System.Collections;
 
 namespace Cannon
 {
+    [RequireComponent(typeof(TrajectoryCalculation))]
     public class CannonMechanic : MonoBehaviour
     {
         [SerializeField] private Rigidbody2D _ballPrefab;
         [SerializeField] private Transform _cannonTarget;
         [SerializeField] private GameObject _ballsContainer;
         [SerializeField] private float _power = 2f;
+        private TrajectoryCalculation _trajectory;
 
         private bool _isShooting = false;
         private bool _isAiming;
-        
-        private void Start()
-        {
-            EventManager.ShootedForce += ShootForce;
-        }
-        
-        private void Aim()
+
+        private void Aim(TrajectoryCalculation trajectory)
         {
             if (_isShooting) return;
             if (Input.GetMouseButton(0)) // While button is pressed
@@ -26,7 +23,7 @@ namespace Cannon
                 if (!_isAiming) _isAiming = true;
                 else
                 {
-                    EventManager.OnAimed();
+                    trajectory.PathCalculation();
                     Rotate();
                 }
             }
@@ -34,13 +31,13 @@ namespace Cannon
             {
                 _isAiming = false;
                 StartCoroutine(Shoot());
-                EventManager.OnHidedDots();
+                _trajectory.HideDots();
             }
         }
 
         private void Update()
         {
-            Aim();
+            Aim(_trajectory);
         }
 
         private void Rotate()
@@ -53,7 +50,7 @@ namespace Cannon
         /// <summary>
         /// Return negative mouse position multiplied by power
         /// </summary>
-        private Vector2 ShootForce(Vector2 force)
+        public Vector2 ShootForce(Vector2 force)
         {
             return new Vector2(Input.mousePosition.x, Input.mousePosition.y) -
                    ((new Vector2(force.x, force.y)) * _power);

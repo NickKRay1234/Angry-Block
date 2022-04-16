@@ -8,18 +8,7 @@ namespace Cannon
     {
         [SerializeField] private List<Renderer> _projectilesPath;
         [SerializeField] private Rigidbody2D _ballPrefab;
-
-        private void Start()
-        {
-            EventManager.Aimed += OnPathCalculated;
-            EventManager.HidedDots += OnHidedTheDots;
-        }
-
-        private void OnDestroy()
-        {
-            EventManager.Aimed -= OnPathCalculated;
-            EventManager.HidedDots -= OnHidedTheDots;
-        }
+        private CannonMechanic _cannon;
 
         /// <summary>
         /// Projectile line of flight
@@ -35,7 +24,7 @@ namespace Cannon
                 _projectilesPath[i].enabled = true;
         }
 
-        private void OnHidedTheDots()
+        public void HideDots()
         {
             for (int i = 0; i < _projectilesPath.Count; i++)
                 _projectilesPath[i].enabled = false;
@@ -46,10 +35,10 @@ namespace Cannon
         /// </summary>
         private Vector2 VelocityCalculation()
         {
-            return ShootedForce(Input.mousePosition) * Time.fixedDeltaTime / _ballPrefab.mass;
+            return _cannon.ShootForce(Input.mousePosition) * Time.fixedDeltaTime / _ballPrefab.mass;
         }
 
-        private void OnPathCalculated()
+        public void PathCalculation()
         {
             for (int i = 0; i < _projectilesPath.Count; i++)
             {
