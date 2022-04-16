@@ -10,6 +10,11 @@ namespace Cannon
         [SerializeField] private Rigidbody2D _ballPrefab;
         private CannonMechanic _cannon;
 
+        private void Awake()
+        {
+            _cannon = GetComponent<CannonMechanic>();
+        }
+
         /// <summary>
         /// Projectile line of flight
         /// </summary>
