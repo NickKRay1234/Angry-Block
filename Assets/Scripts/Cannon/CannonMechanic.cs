@@ -15,7 +15,7 @@ namespace Cannon
         private bool _isShooting = false;
         private bool _isAiming;
 
-        private void Aim(TrajectoryCalculation trajectory)
+        private void Aim()
         {
             if (_isShooting) return;
             if (Input.GetMouseButton(0)) // While button is pressed
@@ -23,7 +23,7 @@ namespace Cannon
                 if (!_isAiming) _isAiming = true;
                 else
                 {
-                    trajectory.PathCalculation();
+                    _trajectory.PathCalculation();
                     Rotate();
                 }
             }
@@ -37,7 +37,7 @@ namespace Cannon
 
         private void Update()
         {
-            Aim(_trajectory);
+            Aim();
         }
 
         private void Rotate()
