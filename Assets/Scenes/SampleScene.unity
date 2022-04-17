@@ -1784,7 +1784,7 @@ GameObject:
   - component: {fileID: 2104142836}
   - component: {fileID: 2104142835}
   m_Layer: 0
-  m_Name: GameController
+  m_Name: BlocksSpawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1802,8 +1802,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02f00a6041ac4c04c824e2e542c4a8e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  block: []
-  levels:
+  "_block\u0421ombinations":
   - {fileID: 2359, guid: d4106294e37148e5bf0611ead7f94791, type: 3}
   - {fileID: 2637, guid: 2e05bd7e33b347219e91a8aae0eca5e7, type: 3}
   - {fileID: 3381, guid: 5b51416f0f5146ba895fd6758156ee7c, type: 3}
@@ -1849,6 +1848,7 @@ MonoBehaviour:
   - {fileID: 2386, guid: 87d5d88257db4509a753a4ee06218709, type: 3}
   - {fileID: 5447, guid: b2cff1ab86bb479fa86d5dd4b8975c4b, type: 3}
   - {fileID: 2684, guid: 740e756a7b6d42e9b96440b3e3a47faa, type: 3}
+  _block: []
 --- !u!4 &2104142836
 Transform:
   m_ObjectHideFlags: 0
@@ -2061,4 +2061,4 @@ MonoBehaviour:
   _ballPrefab: {fileID: 7841212252099804967, guid: 3baa73e37e6af81408a64c2f974e8825, type: 3}
   _cannonTarget: {fileID: 1525021266}
   _ballsContainer: {fileID: 962325332}
-  _power: 2
+  _power: 3

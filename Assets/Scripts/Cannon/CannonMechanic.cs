@@ -52,9 +52,6 @@ namespace Cannon
             transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
         }
         
-        /// <summary>
-        /// Return negative mouse position multiplied by power
-        /// </summary>
         public Vector2 ShootForce(Vector2 force)
         {
             return new Vector2(Input.mousePosition.x, Input.mousePosition.y) -
