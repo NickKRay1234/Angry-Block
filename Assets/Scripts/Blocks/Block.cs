@@ -3,13 +3,17 @@ using UnityEngine;
 public class Block : MonoBehaviour
 {
     private int count;
+    private const int _borderY = 7;
 
     private void Update()
     {
-        if (transform.position.y <= -7)
-        {
+        BlockDrop(_borderY);
+    }
+
+    private void BlockDrop(int borderY)
+    {
+        if (transform.position.y <= borderY) 
             Destroy(gameObject);
-        }
     }
 
     public void SetStartingCount(int count)
