@@ -14,10 +14,13 @@ namespace Cannon
         {
             _cannon = GetComponent<CannonMechanic>();
         }
-        
-        private Vector2 DotPath(Vector2 position, Vector2 velocity, float distance)
+
+        /// <summary>
+        /// Projectile line of flight
+        /// </summary>
+        private Vector2 DotPath(Vector2 position, Vector2 velocity, float t)
         {
-            return position + velocity * distance + (Physics2D.gravity / 2) * (float)Math.Pow(distance, 2);
+            return position + velocity * t + (Physics2D.gravity / 2) * (float)Math.Pow(t, 2);
         }
 
         private void ShowTheDots()
@@ -31,19 +34,22 @@ namespace Cannon
             for (int i = 0; i < _projectilesPath.Count; i++)
                 _projectilesPath[i].enabled = false;
         }
-        
-        private Vector2 VelocityCalculation() // V = F/m
+
+        /// <summary>
+        /// Formula: V = F/m
+        /// </summary>
+        private Vector2 VelocityCalculation()
         {
             return _cannon.ShootForce(Input.mousePosition) * Time.fixedDeltaTime / _ballPrefab.mass;
         }
 
         public void PathCalculation()
         {
-            for(int i = 0; i < _projectilesPath.Count; i++)
+            for (int i = 0; i < _projectilesPath.Count; i++)
             {
-                float distance = i / (float)_projectilesPath.Count;
+                float t = i / (float)_projectilesPath.Count;
                 ShowTheDots();
-                _projectilesPath[i].transform.position = DotPath(transform.position, VelocityCalculation(), distance);
+                _projectilesPath[i].transform.position = DotPath(transform.position, VelocityCalculation(), t);
             }
         }
     }
